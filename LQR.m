@@ -70,9 +70,10 @@ C = [
     0 0 0 0 0 0 0 1 0 0 0 0;
     0 0 0 0 0 0 0 0 1 0 0 0;
     ];
-%C = [eye(3,3) zeros(3,9)]
+% C is 3 by 12
+C = [eye(3,3) zeros(3,9)];
 D = zeros(6, 4);
-%D = zeros(3,4)
+D = zeros(3, 4);
 
 % 4.2) DISCRETIZATION - Bilinear
 Ts = 0.05;
@@ -115,11 +116,15 @@ for i = 1:12
     end
 end
 
-Q = [[20 0 0;
-     0 20 0;
-     0 0 50] zeros(3,9); zeros(9,3) eye(9)];
+Q = [[10 0 0;
+     0 10 0;
+     0 0 10] zeros(3,9); zeros(9,3) eye(9)];
 R = 10*eye(4);
 [K,S,P] = lqr(sys,Q,R);
 
 load("../references_05.mat")
+
+Ns = pinv([A B; C D])*[zeros(12,3); eye(3)];
+Nx = Ns(1:12,:);
+Nu = Ns(13:16, :);
 
