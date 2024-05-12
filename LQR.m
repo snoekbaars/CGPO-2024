@@ -118,8 +118,8 @@ end
 
 Q = [[10 0 0;
      0 10 0;
-     0 0 10] zeros(3,9); zeros(9,3) eye(9)];
-R = 10*eye(4);
+     0 0 100] zeros(3,9); zeros(9,3) eye(9)];
+R = 100*eye(4);
 [K,S,P] = lqr(sys,Q,R);
 
 load("../references_05.mat")
