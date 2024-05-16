@@ -1,5 +1,4 @@
 clear; close all; clc;
-addpath("..")
 
 % CONSTANTS DECLARATION
 m = 0.5;        % quadcopter mass
@@ -62,17 +61,19 @@ B = [
     ];
 
 % C is 6 by 12
-C = [
-    1 0 0 0 0 0 0 0 0 0 0 0;
-    0 1 0 0 0 0 0 0 0 0 0 0;
-    0 0 1 0 0 0 0 0 0 0 0 0;
-    0 0 0 0 0 0 1 0 0 0 0 0;
-    0 0 0 0 0 0 0 1 0 0 0 0;
-    0 0 0 0 0 0 0 0 1 0 0 0;
-    ];
+% C = [
+%     1 0 0 0 0 0 0 0 0 0 0 0;
+%     0 1 0 0 0 0 0 0 0 0 0 0;
+%     0 0 1 0 0 0 0 0 0 0 0 0;
+%     0 0 0 0 0 0 1 0 0 0 0 0;
+%     0 0 0 0 0 0 0 1 0 0 0 0;
+%     0 0 0 0 0 0 0 0 1 0 0 0;
+%     ];
+
 % C is 3 by 12
 C = [eye(3,3) zeros(3,9)];
-D = zeros(6, 4);
+
+% D = zeros(6, 4);
 D = zeros(3, 4);
 
 % 4.2) DISCRETIZATION - Bilinear
@@ -120,11 +121,59 @@ Q = [[10 0 0;
      0 10 0;
      0 0 1000] zeros(3,9); zeros(9,3) eye(9)];
 R = 0.1*eye(4);
+
 [K,S,P] = lqr(sys,Q,R);
 
-load("../references_05.mat")
+load("references_05.mat")
 
 Ns = pinv([A B; C D])*[zeros(12,3); eye(3)];
 Nx = Ns(1:12,:);
 Nu = Ns(13:16, :);
+
+
+%% LQR controller with integral action
+
+% Augmenting the system with extra states integrating the output error:
+
+Aa = [eye(3) Cd; zeros(12, 3) Ad];
+
+Ba = [Dd;Bd]; 
+
+Ca = [zeros(3, 3) Cd]; 
+
+Da = Dd; 
+
+sys_a = ss(Aa, Ba, Ca, Da, Ts);
+
+% Verify controllability of the system:
+
+Co_a = ctrb(sys_a);
+rank(Co_a) % Has to be 15, and it is
+
+xyz_weights = [10 0 0;
+                0 10 0;
+                0 0 1000;];
+
+Qa = [eye(3) zeros(3, 12); 
+      zeros(3, 3) xyz_weights zeros(3, 9);
+      zeros(9, 6) eye(9)];
+
+
+Ra = R;
+
+[Ka, Sa, Pa] = lqr(sys_a, Qa, Ra);
+
+Ka
+
+K1_a = Ka(:, 1:3)
+K0_a = Ka(:, 4:end)
+
+
+
+
+
+
+
+
+
 
