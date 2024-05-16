@@ -79,17 +79,12 @@ D = zeros(3, 4);
 % 4.2) DISCRETIZATION - Bilinear
 Ts = 0.05;
 
-% A = zeros(12);
-% B = zeros(12,4);
-% C = zeros(6, 12);
-% D = zeros(6, 4);
+sysc = ss(A, B, C, D);
 
 Ad = (eye(12)-A*Ts/2)\(eye(12)+A*Ts/2);
 Bd = (eye(12)-A*Ts/2)\B*Ts;
 Cd = C/(eye(12)-A*Ts/2);
 Dd = D+C/inv(eye(12)-A*Ts/2)*B*Ts/2;
-
-
 
 sys = ss(Ad, Bd, Cd, Dd, Ts);
 
@@ -126,7 +121,7 @@ R = 0.1*eye(4);
 
 load("references_05.mat")
 
-Ns = pinv([A B; C D])*[zeros(12,3); eye(3)];
+Ns = pinv([Ad-eye(12) Bd; Cd Dd])*[zeros(12,3); eye(3)];
 Nx = Ns(1:12,:);
 Nu = Ns(13:16, :);
 
@@ -150,23 +145,23 @@ sys_a = ss(Aa, Ba, Ca, Da, Ts);
 Co_a = ctrb(sys_a);
 rank(Co_a) % Has to be 15, and it is
 
-xyz_weights = [10 0 0;
-                0 10 0;
-                0 0 1000;];
+xyz_weights = 1e2*[1 0 0;
+                0 1 0;
+                0 0 1;];
 
-Qa = [eye(3) zeros(3, 12); 
+Qa = [1e2*eye(3) zeros(3, 12); 
       zeros(3, 3) xyz_weights zeros(3, 9);
-      zeros(9, 6) eye(9)];
+      zeros(9, 6) 1e2*eye(9)];
 
 
-Ra = R;
+Ra = eye(4);
 
-[Ka, Sa, Pa] = lqr(sys_a, Qa, Ra);
+[Ka, Sa, Pa] = lqi(sys, Qa, Ra);
 
 Ka
 
-K1_a = Ka(:, 1:3)
-K0_a = Ka(:, 4:end)
+K0_a = Ka(:, 1:12)
+K1_a = Ka(:, 13:end)
 
 
 
