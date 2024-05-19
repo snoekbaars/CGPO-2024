@@ -17,13 +17,13 @@ sysa = ss(Aa, Ba, Ca, Da, Ts);
 Co_a = ctrb(sysa);
 rank(Co_a) % Has to be 15, and it is
 
-xyz_weights = 1e2*[1 0 0;
+xyz_weights = [1 0 0;
                 0 1 0;
                 0 0 1;];
 
-Qa = [1e2*eye(3) zeros(3, 12); 
+Qa = 1e2*[eye(3) zeros(3, 12); 
       zeros(3, 3) xyz_weights zeros(3, 9);
-      zeros(9, 6) 1e2*eye(9)];
+      zeros(9, 6) eye(9)];
 
 
 Ra = eye(4);

@@ -63,7 +63,7 @@ B = [
     ];
 
 % C is 6 by 12
-% C = [
+%C = [
 %     1 0 0 0 0 0 0 0 0 0 0 0;
 %     0 1 0 0 0 0 0 0 0 0 0 0;
 %     0 0 1 0 0 0 0 0 0 0 0 0;
@@ -75,7 +75,7 @@ B = [
 % C is 3 by 12
 C = [eye(3,3) zeros(3,9)];
 
-% D = zeros(6, 4);
+%D = zeros(6, 4);
 D = zeros(3, 4);
 
 % 4.2) DISCRETIZATION - Bilinear
