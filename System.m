@@ -1,4 +1,3 @@
-%clear; close all; clc;
 addpath("..")
 load("references_05.mat")
 

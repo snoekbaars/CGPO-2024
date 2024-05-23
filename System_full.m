@@ -1,19 +1,3 @@
-clear; close all; clc;
-addpath("..")
-load("references_05.mat")
-
-% CONSTANTS DECLARATION
-m = 0.5;        % quadcopter mass
-L = 0.25;       % quadcopter radius
-k = 3e-6;       % propeller lift coefficient
-b = 1e-7;       % propeller drag coefficient
-g = 9.81;       % acceleration due to gravity
-k_d = 0.25;     % air friction coefficient
-Ixx = 5e-3;     % inertia about x_b axis
-Iyy = 5e-3;     % inertia about y_b axis
-Izz = 1e-2;     % inertia about z_b axis
-c_m = 1e4;      % motor constantclear; close all; clc;
-addpath("..")
 load("references_05.mat")
 
 % CONSTANTS DECLARATION
