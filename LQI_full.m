@@ -1,6 +1,4 @@
-%% Linear Quadratic Gaussian Control 
-% Using the LQR with integral action and 
-% a Kalman filter for the state estimation
+%% LQR controller with integral action
 
 clear all; close all; clc;
 
@@ -10,12 +8,11 @@ System_full;
 % The system is stored in the variable sysd
 sysd
 
-%% LQR with Integral Action
-
 % Matlab has a built-in function lqi for computing the LQR
 % with integral action. This function assumes that the dimensions
 % of the output and the reference are the same. We therefore truncate
 % the matrices C and D of the original system
+
 C_lqi = Cd(1:3, :);
 D_lqi = Dd(1:3, :);
 
@@ -49,27 +46,3 @@ Ra = eye(4);
 [Ka, Sa, Pa] = lqi(sys_lqi, Qa, Ra);
 K_s = Ka(:, 1:12);
 K_i = Ka(:, 13:end);
-
-%% Designing the Kalman filter
-
-% We are using the kalman function from matlab to design the kalman filter
-
-% To use this function, we need to take into account the matrix B1 provided
-% and create a new system, with a modified B matrix. This will be the
-% system with noise.
-
-Bk = [sysd.B eye(12)];
-Dk = [sysd.D zeros(6, 12)];
-
-sysk = ss(sysd.A, Bk, sysd.C, Dk, Ts);
-
-% Estimate of the variance of the process noise
-var_p = 1e-2;
-
-% Process noise covariance matrix with weighting
-Qk = var_p*diag([1 1 1e-6 1 1 20 1 1 1 1 1 1]);
-
-% Measurement noise
-Rk = diag([2.5e-5 2.5e-5 2.5e-5 7.57e-5 7.57e-5 7.57e-5]);
-
-[kalmf, L, P] = kalman(sysk, Qk, Rk);

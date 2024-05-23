@@ -1,6 +1,13 @@
-Q = [[10 0 0;
-     0 10 0;
-     0 0 1000] zeros(3,9); zeros(9,3) eye(9)];
+%% LQR state-feedback controller
+clear all; close all; clc;
+
+% Loading the discretized linearized system
+System;
+% The system is stored in the variable sysd
+sysd
+
+Q = diag([10 10 1000 1 1 1 1 1 1 1 1 1]);
+
 R = 1*eye(4);
 
 [K,S,P] = lqr(sysd,Q,R);

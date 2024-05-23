@@ -1,5 +1,11 @@
 %% LQR controller with integral action
 
+% Loading the discretized linearized system
+System;
+
+% The system is stored in the variable sysd
+sysd
+
 % Augmenting the system with extra states integrating the output error:
 
 Aa = [eye(3) Cd; zeros(12, 3) Ad];
@@ -31,3 +37,4 @@ Ra = eye(4);
 [Ka, Sa, Pa] = lqi(sysd, Qa, Ra);
 K0_a = Ka(:, 1:12);
 K1_a = Ka(:, 13:end);
+
