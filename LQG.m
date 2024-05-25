@@ -73,3 +73,13 @@ Qk = var_p*diag([1 1 1e-6 1 1 20 1 1 1 1 1 1]);
 Rk = diag([2.5e-5 2.5e-5 2.5e-5 7.57e-5 7.57e-5 7.57e-5]);
 
 [kalmf, L, P] = kalman(sysk, Qk, Rk);
+
+%% Estimator gain
+
+% The estimation error (without noise) is governed by the system matrix
+syse_matrix = (sysd.A - L*sysd.C);
+
+eig(syse_matrix)
+
+
+
