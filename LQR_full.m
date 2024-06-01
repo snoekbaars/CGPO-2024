@@ -19,3 +19,4 @@ R = eye(4);
 N = pinv([Ad - eye(12) Bd; Cd  Dd])*[zeros(12, 3); eye(3); zeros(3)];
 Nx = N(1:12,:);
 Nu = N(13:end, :);
+
